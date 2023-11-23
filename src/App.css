@@ -1,0 +1,15 @@
+#root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+main > section {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
