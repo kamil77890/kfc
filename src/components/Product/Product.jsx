@@ -6,16 +6,20 @@ import ProductModal from "../ProductModal/ProductModal";
 const Product = (props) => {
   const { product, orderedProducts, onProductSelect } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [count, setCount] = useState(1);
+
   const { id, name, price, description, imageUrl } = product;
   const isOrdered = orderedProducts.some(
-    (orderedProduct) => orderedProduct.id === id
+    (orderedProduct) =>
+      orderedProduct.id === id && orderedProduct.count === count
   );
-  const orderCount = orderedProducts.filter(
-    (orderedProduct) => orderedProduct.id === id
-  ).length;
+
+  const orderCount = orderedProducts
+    .filter((orderedProduct) => orderedProduct.id === id)
+    .reduce((total, orderedProduct) => total + orderedProduct.count, 0);
 
   const handleButtonClick = () => {
-    onProductSelect(product);
+    onProductSelect({ ...product, count }, true);
     setIsModalOpen(true);
   };
 
@@ -35,15 +39,21 @@ const Product = (props) => {
         </header>
         <footer>
           <strong>{price}</strong>
-          <button onClick={handleButtonClick}>
-            {isOrdered ? orderCount : "+"}
-          </button>
+          <div>
+            <button onClick={handleButtonClick}>
+              {isOrdered ? `In Basket (${orderCount})` : "+"}
+            </button>
+            <span>{count}</span>
+          </div>
         </footer>
       </div>
       {isModalOpen && (
         <ProductModal
+          product={product}
           orderedProducts={orderedProducts}
+          count={count}
           onClose={handleCloseModal}
+          onProductSelect={onProductSelect}
         />
       )}
     </article>

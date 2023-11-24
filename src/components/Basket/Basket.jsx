@@ -1,4 +1,3 @@
-// Basket.jsx
 import React from "react";
 import { groupBy } from "../../utils";
 import BasketItem from "../BasketItem/BasketItem";
@@ -8,7 +7,7 @@ const Basket = (props) => {
   const { orderedProducts, onProductRemove, onClearBasket } = props;
 
   const totalCost = orderedProducts.reduce(
-    (acc, orderedProduct) => acc + orderedProduct.price,
+    (acc, orderedProduct) => acc + orderedProduct.price * orderedProduct.count,
     0
   );
 
