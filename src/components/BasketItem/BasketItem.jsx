@@ -2,8 +2,8 @@ import React from "react";
 import "./BasketItem.scss";
 
 const BasketItem = (props) => {
-  const { orderedProduct, onProductRemove, orderCount } = props;
-  const { name, price } = orderedProduct;
+  const { orderedProduct, onProductRemove } = props;
+  const { name, price, count } = orderedProduct;
 
   function handleButtonClick() {
     onProductRemove(orderedProduct);
@@ -12,7 +12,7 @@ const BasketItem = (props) => {
   return (
     <li className="basket-item">
       <div className="info">
-        <span>{orderCount}x</span>
+        <span>{count}x</span>
         <span>{name}</span>
         <span>{price}</span>
       </div>

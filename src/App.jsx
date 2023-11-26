@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./App.css";
 import products from "./mocks/products.json";
 import Product from "./components/Product/Product";
-import Basket from "./components/Basket/Basket";
+import { Basket } from "./components/Basket/Basket";
 import ProductModal from "./components/ProductModal/ProductModal";
 
 function App() {
@@ -13,16 +13,29 @@ function App() {
 
   const handleProductSelect = (product) => {
     setIsModalOpen(true);
-    setSelectedProduct(product);
+    setSelectedProduct({ ...product, count: 1 });
   };
 
   const handleProductAddToBasket = (product) => {
-    setOrderedProducts([...orderedProducts, product]);
+    setOrderedProducts((orderedProducts) => {
+      const existingIndex = orderedProducts.findIndex(
+        (p) => p.id === product.id
+      );
+      if (existingIndex !== -1) {
+        const updatedProducts = [...orderedProducts];
+
+        updatedProducts[existingIndex].count++;
+
+        return updatedProducts;
+      } else {
+        return [...orderedProducts, { ...product, count: 1 }];
+      }
+    });
   };
 
   const handleProductRemove = (orderedProduct) => {
-    setOrderedProducts(
-      orderedProducts.filter((product) => product.id !== orderedProduct.id)
+    setOrderedProducts((prevOrderedProducts) =>
+      prevOrderedProducts.filter((product) => product.id !== orderedProduct.id)
     );
   };
 
@@ -38,9 +51,8 @@ function App() {
   return (
     <>
       <Basket
-        orderedProducts={orderedProducts}
+        onProductAddToBasket={() => orderedProducts}
         onProductRemove={handleProductRemove}
-        onProductSelect={handleProductSelect}
         onClearBasket={handleClearBasket}
       />
       <main>
@@ -54,6 +66,7 @@ function App() {
               key={product.id}
               product={product}
               onProductSelect={handleProductSelect}
+              onProductAddToBasket={handleProductAddToBasket}
               orderedProducts={orderedProducts}
             />
           ))}

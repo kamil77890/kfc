@@ -7,24 +7,23 @@ import { FaArrowLeft, FaHeart, FaRegHeart, FaArrowRight } from "react-icons/fa";
 import products from "../../mocks/products.json";
 
 const ProductModal = (props) => {
-  const { product, onClose, onProductSelect } = props;
+  const { product, onClose, onProductAddToBasket } = props;
   const { name, price, description, imageUrl } = product;
-  const [count, setCount] = useState(product.count || 1);
+  const [count, setCount] = useState(1);
+
   const [isHeartChange, setHeartChange] = useState(false);
 
   const imageUrlProduct = products.map((product) => product.imageUrl);
 
   const sumPrice = count * price;
 
-  const corectProduct = { ...product, count };
-
   const handleAddToBasket = () => {
-    onProductSelect(corectProduct);
+    onProductAddToBasket(product, count);
     onClose();
   };
 
   const responsive = {
-    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 8 },
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
     tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },

@@ -1,15 +1,15 @@
+// Basket.jsx
 import React from "react";
-import { groupBy } from "../../utils";
 import BasketItem from "../BasketItem/BasketItem";
 import "./Basket.scss";
+import { groupBy } from "../../utils";
 
-const Basket = (props) => {
-  const { orderedProducts, onProductRemove, onClearBasket } = props;
+export const Basket = (props) => {
+  const { onProductAddToBasket, onProductRemove, onClearBasket } = props;
 
-  const totalCost = orderedProducts.reduce(
-    (acc, orderedProduct) => acc + orderedProduct.price * orderedProduct.count,
-    0
-  );
+  const orderedProducts = onProductAddToBasket() || [];
+  const { count } = orderedProducts;
+  console.log(count)
 
   const groupedOrderedProducts = Object.entries(
     groupBy(orderedProducts, (product) => product.name)
@@ -18,6 +18,11 @@ const Basket = (props) => {
   const handleRemoveProduct = (orderedProduct) => {
     onProductRemove(orderedProduct);
   };
+
+  const totalCost = orderedProducts.reduce(
+    (sum, orderedProduct) => sum + orderedProduct.price * orderedProduct.count,
+    0
+  );
 
   return (
     <div className="basket">
@@ -30,11 +35,11 @@ const Basket = (props) => {
       </header>
       <div>
         <ul>
-          {groupedOrderedProducts.map(([name, orderedProducts], index) => (
+          {groupedOrderedProducts.map(([name, product], index) => (
             <BasketItem
               key={`${name}-${index}`}
-              orderedProduct={orderedProducts[0]}
-              orderCount={orderedProducts.length}
+              orderedProduct={product[0]}
+              orderCount={count}
               onProductRemove={handleRemoveProduct}
             />
           ))}
